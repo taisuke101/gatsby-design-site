@@ -2,6 +2,7 @@ import React from "react"
 import styled from "styled-components"
 import Title from "./Title"
 import services from "../constants/services"
+
 const About = () => {
   return( 
     <Wrapper className='section'>

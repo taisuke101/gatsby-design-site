@@ -4,15 +4,50 @@ import styled from "styled-components"
 import { Link } from "gatsby"
 import { FiChevronRight, FiChevronLeft } from "react-icons/fi"
 
-const Hero = () => {
+const Hero = ({ projects }) => {
+  const images = projects.map((item) => {
+    const {data: {image: {localFiles}}} = item;
+    const image = localFiles[0].childImageSharp.fluid;
+    return image;
+  })
+  
+  const [index, setIndex] = React.useState(0);
+
+  React.useEffect( () => {
+    const lastIndex = images.length - 1
+    if (index < 0) {
+      setIndex(lastIndex)
+    }
+    if (index > lastIndex) {
+      setIndex(0)
+    }
+  }, [index, images])
+
   return (
     <Wrapper>
-      <Background>
+      <Background image={images[index]}>
         <article>
           <h3>If you Can Dream It, We Can Create It.</h3>
           <h1>let your home be unique and stylish</h1>
           <Link to='/projects'>Projects</Link>
         </article>
+        <button className='prev-btn' onClick={() => setIndex(index - 1)}>
+          <FiChevronLeft />
+        </button>
+        <button className='next-btn' onClick={() => setIndex(index + 1)}>
+          <FiChevronRight />
+        </button>
+        <div className='dots'>
+          {images.map((_,btnIndex) => {
+            return (
+              <span 
+                key={btnIndex}
+                onClick={() => setIndex(btnIndex)}
+                className={ index === btnIndex ? 'active' : undefined }>
+              </span>
+            )
+          })}
+        </div>
       </Background>
     </Wrapper>
   )
